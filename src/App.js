@@ -33,7 +33,6 @@ class App extends Component {
   printContent() {
     let _subTitle, _subText, _article = null;
     if (this.state.mode === 'welcome') {
-      // welcome 일 때 동작 수행하게
       _subTitle = this.state.welcome.subTitle;
       _subText = this.state.welcome.subText;
       _article = <ReadContent subTitle={_subTitle} subText={_subText}></ReadContent>;
@@ -46,8 +45,6 @@ class App extends Component {
       
     }
     else if (this.state.mode === 'create') {
-      // create 동작일 때 최대 id 값을 올려주고 _article은 createContent의 결과여야 
-      // 그리고 mode와 content, selected_id를 업그레이드 해줘야
       this.max_content_id++;
       _article = <CreateContent
         onSubmit={function (_subject, _desc) {
@@ -61,13 +58,11 @@ class App extends Component {
       ></CreateContent>
     }
     else if (this.state.mode === 'update') {
-      // update는 좀 복잡해. read 된 것의 내용을 create 양식에 그대로 가져오고
-      // 이걸 수정한 다음 submit 하면 setState로 갱신이 되어야 해 
       _article = <UpdateContent 
         onSubmit={function (_id, _subTitle, _subText) {
           const renewContent = Array.from(this.state.contents);
           for (let i = 0; i < renewContent.length; i++) {
-            if (_id === renewContent[i].id) { // 해당하는 id값을 찾으면 그 내용을 변경하는거야
+            if (_id === renewContent[i].id) {
               renewContent[i] = { id: _id, subTitle: _subTitle, subText: _subText };
               break;
             }
@@ -85,7 +80,6 @@ class App extends Component {
   }
 
   deleteContent() {
-    // 해당하는 content를 불러서 pop을 한뒤 max id 바꿔.
     let _contents = Array.from(this.state.contents);
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       for (let i = 0; i < _contents.length; i++) {
@@ -124,11 +118,10 @@ class App extends Component {
         ></List>
         
         <Control onChangeMode={function (_mode) {
-            // delete일 때는 바로 실행하게 하자
             if (_mode === 'delete') {
               this.deleteContent();
             }
-            else { // delete가 아닌 모든 오퍼레이션들 
+            else {
               this.setState({
                 mode: _mode
               });
